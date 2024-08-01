@@ -1,0 +1,24 @@
+import { ok, serverError } from 'wix-http-functions';
+import wixData from 'wix-data';
+
+export function post_submitEmail(request) {
+  return request.body.json()
+    .then((body) => {
+      const email = body.email;
+      const panelName = body.panelName;
+      const toInsert = {
+        email: email,
+        panelName: panelName
+      };
+      return wixData.insert('CIC2024Registrations', toInsert)
+        .then(() => ok({ success: true }))
+        .catch((error) => {
+          console.error(error);
+          return serverError({ success: false, error: 'Failed to insert email' });
+        });
+    })
+    .catch((error) => {
+      console.error(error);
+      return serverError({ success: false, error: 'Invalid JSON' });
+    });
+}
