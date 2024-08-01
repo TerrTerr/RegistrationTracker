@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Registration</title>
+</head>
+<body>
+    <h2>Enter your .edu email address to register for this event.</h2>
+    <p>Registered attendees will receive the event Zoom link on the day of the event via email and calendar invite.</p>
+    <form id="registrationForm">
+        <input type="email" id="email" name="email" pattern=".+@.+\.edu" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            fetch('https://www.yourwixsite.com/_functions/submitEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Registration successful!');
+                } else {
+                    alert('Failed to register. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to register. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
+
